@@ -1,5 +1,5 @@
 module main(
-    input  clk,      // one clock from both the protocols
+    input  clk,      // one clock for both the protocols
     input  preset_n,
     input  apb_addr_test, // from test_bench
     output reg psel_o,
@@ -29,11 +29,17 @@ module main(
   always@(*)
   begin
     case(curr_q)
-      ST_IDLE:
-      ST_SETUP:
-      ST_ACCESS:
-            default:
-            endcase
+      ST_IDLE: if(psel_o==1'b1 && penable_o==1'b1)
+      ST_IDLE;
+      else
+      nxt_state = ST_SETUP;
+      ST_SETUP: nxt_state = ST_ACCESS;
+      ST_ACCESS: if(pready_i==1'b1)
+      nxt_state = ST_ACCESS;
+      else
+      nxt_state = ST_IDLE;
+      default: nxt_state = ST_IDLE;
+      endcase
   end
 
   assign psel_o = (curr_state == ST_SETUP) | (curr_state == ST_ACCESS);
