@@ -1,16 +1,17 @@
 module main(
-    input  clk,      // one clock for both the protocols
-    input  preset_n,
+    input  clk,      // one clock for both the protocols - from test_bench
+    input  preset_n, // from test_bench
     input  apb_addr_test, // from test_bench
-    output reg psel_o,
-    output reg penable_o,
-    output reg [31:0] paddr_o,
-    output reg pwrite_o,
-    output reg [31:0] pwdata_o,
-    input  [31:0] prdata_i,
-    input  pready_i
   );
-
+// Signal Declaration - SLAVE APB INTERFACE wrt Bridge
+reg preset_i;
+reg psel_o;
+reg penable_o;
+reg pwrite_o;
+reg [31:0] paddr_o;
+reg [31:0] pwdata_o;
+reg [31:0] prdata_i;
+reg pready_i;
 /************************************ AHB ***********************************/
 
 
